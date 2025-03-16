@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分计算可视化 | 数学概念可视化教学平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 添加Bootstrap图标 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- 使用完整版p5.js -->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/common-experiment.css">
+    <style>
+        /* 积分计算页面特有的样式 */
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .tab-content {
+            margin-top: 20px;
+        }
+        
+        .canvas-container {
+            border: 1px solid #dee2e6;
+            background-color: white;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+            min-height: 500px;
+            position: relative;
+        }
+        
+        .panel {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .slider-container {
+            margin-bottom: 15px;
+        }
+        
+        .value-display {
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        /* 显示修复 */
+        canvas {
+            display: block !important;
+            margin: 0 auto !important;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        /* 作者信息样式 */
+        .author-banner {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6, #0ea5e9);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .author-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .author-info h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .author-info p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 6px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .resource-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .resource-btn, .resource-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .resource-btn:hover, .resource-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .wechat-btn {
+            background-color: rgba(130, 230, 80, 0.25);
+        }
+        
+        .wechat-btn:hover {
+            background-color: rgba(130, 230, 80, 0.35);
+        }
+        
+        /* 积分计算页面特殊样式 */
+        .values-display {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .value-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .value-label {
+            font-weight: 500;
+        }
+        
+        .value {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .math-formula {
+            font-style: italic;
+            padding: 0 3px;
+        }
+        
+        .blob-card {
+            position: relative;
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .blob {
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card-title {
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+        
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .card-link svg {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card-link:hover {
+            color: #1d4ed8;
+        }
+        
+        .card-link:hover svg {
+            transform: translateX(5px);
+        }
+        
+        /* 新的加载动画样式 */
+        #loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-content {
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        .loading-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+        
+        .integral-animation {
+            width: 300px;
+            height: 200px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .coordinate-system {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-bottom: 2px solid #333;
+            border-left: 2px solid #333;
+        }
+        
+        .curve {
+            position: absolute;
+            top: 0;
+            left: 30px;
+            width: calc(100% - 30px);
+            height: 100%;
+            overflow: visible;
+        }
+        
+        .curve svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .curve path {
+            fill: none;
+            stroke: #3b82f6;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 400;
+            stroke-dashoffset: 400;
+            animation: drawCurve 1.5s ease forwards;
+        }
+        
+        .rectangles {
+            position: absolute;
+            top: 0;
+            left: 30px;
+            width: calc(100% - 30px);
+            height: 100%;
+        }
+        
+        .rectangle {
+            position: absolute;
+            bottom: 0;
+            background-color: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            transform-origin: bottom;
+            opacity: 0;
+        }
+        
+        .rectangle-1 { left: 0%; width: 12.5%; height: 40%; animation: fadeInRect 0.3s ease forwards 0.2s; }
+        .rectangle-2 { left: 12.5%; width: 12.5%; height: 65%; animation: fadeInRect 0.3s ease forwards 0.4s; }
+        .rectangle-3 { left: 25%; width: 12.5%; height: 80%; animation: fadeInRect 0.3s ease forwards 0.6s; }
+        .rectangle-4 { left: 37.5%; width: 12.5%; height: 90%; animation: fadeInRect 0.3s ease forwards 0.8s; }
+        .rectangle-5 { left: 50%; width: 12.5%; height: 82%; animation: fadeInRect 0.3s ease forwards 1.0s; }
+        .rectangle-6 { left: 62.5%; width: 12.5%; height: 65%; animation: fadeInRect 0.3s ease forwards 1.2s; }
+        .rectangle-7 { left: 75%; width: 12.5%; height: 45%; animation: fadeInRect 0.3s ease forwards 1.4s; }
+        .rectangle-8 { left: 87.5%; width: 12.5%; height: 30%; animation: fadeInRect 0.3s ease forwards 1.6s; }
+        
+        .exact-area {
+            position: absolute;
+            bottom: 0;
+            left: 30px;
+            width: calc(100% - 30px);
+            height: 100%;
+            clip-path: path('M0,100% L0,60% Q25%,20% 50%,10% Q75%,0% 100%,40% L100%,100% Z');
+            background-color: rgba(59, 130, 246, 0.15);
+            transform-origin: bottom;
+            transform: scaleY(0);
+            animation: fillArea 0.8s ease forwards 1.8s;
+        }
+        
+        .loading-progress {
+            width: 300px;
+            height: 6px;
+            background-color: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #3b82f6;
+            border-radius: 3px;
+            animation: progressBar 2.5s ease-in-out forwards;
+        }
+        
+        .loading-message {
+            margin-top: 15px;
+            color: #4b5563;
+            font-size: 1rem;
+        }
+        
+        @keyframes drawCurve {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        @keyframes fadeInRect {
+            from {
+                opacity: 0;
+                transform: scaleY(0);
+            }
+            to {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+        
+        @keyframes fillArea {
+            from {
+                transform: scaleY(0);
+                opacity: 0;
+            }
+            to {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes progressBar {
+            0% { width: 0; }
+            40% { width: 40%; }
+            70% { width: 70%; }
+            100% { width: 100%; }
+        }
+        
+        /* 响应式设计 */
+        @media (min-width: 768px) {
+            .author-banner {
+                display: flex;
+                flex-direction: column;
+                padding: 30px;
+            }
+            
+            .author-info {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="script.js" as="script">
+</head>
+<body>
+    <!-- 新的加载指示器 -->
+    <div id="loading-indicator">
+        <div class="loading-content">
+            <h2 class="loading-title">积分计算可视化</h2>
+            <div class="integral-animation">
+                <div class="coordinate-system"></div>
+                <div class="curve">
+                    <svg viewBox="0 0 300 200" preserveAspectRatio="none">
+                        <path d="M0,120 Q75,40 150,20 Q225,0 300,80" />
+                    </svg>
+                </div>
+                <div class="rectangles">
+                    <div class="rectangle rectangle-1"></div>
+                    <div class="rectangle rectangle-2"></div>
+                    <div class="rectangle rectangle-3"></div>
+                    <div class="rectangle rectangle-4"></div>
+                    <div class="rectangle rectangle-5"></div>
+                    <div class="rectangle rectangle-6"></div>
+                    <div class="rectangle rectangle-7"></div>
+                    <div class="rectangle rectangle-8"></div>
+                </div>
+                <div class="exact-area"></div>
+            </div>
+            <div class="loading-message">正在加载积分计算模拟...</div>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="text-center mb-4">积分与面积可视化</h1>
+        
+        <a href="../../index.html" class="btn btn-primary home-btn">
+            返回首页
+        </a>
+        
+        <!-- 作者信息区块 -->
+        <div class="author-banner">
+            <div class="author-info">
+                <h3>哞哞微课设计</h3>
+                <p class="mb-0">哞哞是一位AI+的专业微课设计师</p>
+                <p class="mb-0">目前微课已获国奖、省奖；精品课已获部级</p>
+                <p class="mb-0">该平台是哞哞利用代码开发出来的数学概念可视化交互网站，是一种全新的微课教学方式，该平台仅作展示使用</p>
+                <p>诚接万彩微课、精品课，PPT设计等</p>
+            </div>
+            <div class="resource-buttons">
+                <a href="https://hv21wf9uao9.feishu.cn/wiki/R5iYwaKVuicVr0kZ19acC9OwnUb?from=from_copylink" target="_blank" class="resource-btn">
+                    <i class="bi bi-journal-text"></i> 哞哞微课专属资料
+                </a>
+                <a href="https://www.xiaohongshu.com/user/profile/5cff912400000000170007a2?xsec_token=YBjHEYzdqZTW1eQBpM4YLD8idxT-ndQYhqfLilb9OCYFQ%3D&xsec_source=app_share&xhsshare=CopyLink&appuid=671a0d14000000001d021f4e&apptime=1741942282&share_id=2399488b2ed241aeaa08b7a54ac7f1ff&share_channel=copy_link" target="_blank" class="resource-button">
+                    <i class="bi bi-book"></i> 小红书主页
+                </a>
+                <a class="resource-button wechat-btn" id="wechat-btn">
+                    <i class="bi bi-wechat"></i> 微信：JZNYNandZZZYZ
+                </a>
+            </div>
+        </div>
+        
+        <!-- 标签页导航栏 -->
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <button class="nav-link tab-btn active" data-tab="integral-basics">积分基础</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link tab-btn" data-tab="approximation-methods">近似方法</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link tab-btn" data-tab="integral-applications">积分应用</button>
+            </li>
+        </ul>
+        
+        <!-- 标签页内容 -->
+        <div class="tab-content">
+            <!-- 积分基础标签页 -->
+            <div id="integral-basics" class="tab-pane active">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="canvas-container">
+                            <div id="simulation-canvas"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="panel">
+                            <h3 class="mb-3">积分计算控制面板</h3>
+                            
+                            <div class="control-group">
+                                <label for="function-select" class="control-label">选择函数:</label>
+                                <select id="function-select" class="form-select">
+                                    <option value="quadratic">f(x) = x²</option>
+                                    <option value="cubic">f(x) = x³</option>
+                                    <option value="sine">f(x) = sin(x)</option>
+                                    <option value="linear">f(x) = 2x + 1</option>
+                                    <option value="custom">f(x) = x² - 2</option>
+                                </select>
+                            </div>
+                            
+                            <div class="slider-container">
+                                <label class="form-label">积分下限 (a): <span id="lower-bound-display" class="value-display">-2.0</span></label>
+                                <input type="range" id="lower-bound" class="form-range" min="-5" max="5" step="0.1" value="-2">
+                            </div>
+                            
+                            <div class="slider-container">
+                                <label class="form-label">积分上限 (b): <span id="upper-bound-display" class="value-display">2.0</span></label>
+                                <input type="range" id="upper-bound" class="form-range" min="-5" max="5" step="0.1" value="2">
+                            </div>
+                            
+                            <div class="slider-container">
+                                <label class="form-label">矩形数量: <span id="num-rectangles-display" class="value-display">10</span></label>
+                                <input type="range" id="num-rectangles" class="form-range" min="1" max="100" step="1" value="10">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="rectangle-type" class="control-label">矩形类型:</label>
+                                <select id="rectangle-type" class="form-select">
+                                    <option value="left">左端点</option>
+                                    <option value="right">右端点</option>
+                                    <option value="midpoint" selected>中点</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <div class="form-check">
+                                    <input type="checkbox" id="show-trapezoids" class="form-check-input" checked>
+                                    <label for="show-trapezoids" class="form-check-label">显示梯形法</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" id="show-exact-area" class="form-check-input" checked>
+                                    <label for="show-exact-area" class="form-check-label">显示精确面积</label>
+                                </div>
+                            </div>
+                            
+                            <div class="values-display mt-3">
+                                <div class="value-group">
+                                    <div class="value-label">矩形近似值:</div>
+                                    <div id="rectangle-area" class="value">0.00</div>
+                                </div>
+                                <div class="value-group">
+                                    <div class="value-label">梯形近似值:</div>
+                                    <div id="trapezoid-area" class="value">0.00</div>
+                                </div>
+                                <div class="value-group">
+                                    <div class="value-label">精确积分值:</div>
+                                    <div id="exact-area" class="value">0.00</div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <button id="animate-btn" class="btn btn-primary">
+                                    <i class="bi bi-play-fill"></i> 动画演示
+                                </button>
+                                <button class="btn btn-secondary" onclick="document.getElementById('integral-theory').scrollIntoView({behavior: 'smooth'})">
+                                    <i class="bi bi-book"></i> 查看积分理论
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 积分理论部分 -->
+            <div class="blob-card" id="integral-theory">
+                <div class="blob"></div>
+                <div class="card-content">
+                    <h2 class="card-title">定积分与曲线下面积</h2>
+                    <div class="card-text">
+                        <p>定积分 <span class="math-formula">\(\int_a^b f(x) \, dx\)</span> 表示函数 f(x) 在区间 [a, b] 上与 x 轴之间围成的面积（当函数值为负时，面积为负）。</p>
+                        
+                        <h3>计算近似值的方法</h3>
+                        <p><strong>矩形法</strong>：将区间分成 n 个子区间，用每个子区间上的函数值构建矩形。</p>
+                        <ul>
+                            <li>左端点：使用每个子区间左端点的函数值</li>
+                            <li>右端点：使用每个子区间右端点的函数值</li>
+                            <li>中点：使用每个子区间中点的函数值（通常更精确）</li>
+                        </ul>
+                        <p><strong>梯形法</strong>：将每个子区间上的曲线近似为直线，构成梯形。计算公式：</p>
+                        <p class="math-formula">\(\frac{b-a}{2n}[f(a) + 2f(x_1) + 2f(x_2) + ... + 2f(x_{n-1}) + f(b)]\)</p>
+                        
+                        <h3>定积分的基本性质</h3>
+                        <ul>
+                            <li>区间可加性：<span class="math-formula">\(\int_a^b f(x) \, dx + \int_b^c f(x) \, dx = \int_a^c f(x) \, dx\)</span></li>
+                            <li>线性性质：<span class="math-formula">\(\int_a^b [αf(x) + βg(x)] \, dx = α\int_a^b f(x) \, dx + β\int_a^b g(x) \, dx\)</span></li>
+                            <li>积分上下限互换：<span class="math-formula">\(\int_a^b f(x) \, dx = -\int_b^a f(x) \, dx\)</span></li>
+                        </ul>
+                        
+                        <h3>微积分基本定理</h3>
+                        <p>微积分基本定理建立了定积分与原函数的关系：</p>
+                        <p class="math-formula">\(\int_a^b f(x) \, dx = F(b) - F(a)\)</p>
+                        <p>其中 F(x) 是 f(x) 的一个原函数。通过增加矩形数量，我们可以看到近似值如何越来越接近精确积分值。</p>
+                    </div>
+                    <div class="text-end">
+                        <a href="https://zh.wikipedia.org/wiki/%E7%A7%AF%E5%88%86" target="_blank" class="card-link">
+                            了解更多
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 近似方法标签页 -->
+            <div id="approximation-methods" class="tab-pane">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel">
+                            <h3>积分近似计算方法</h3>
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h4 class="card-title">矩形法</h4>
+                                            <p>将区间 [a, b] 分成 n 个等长子区间，用矩形逼近函数图像。</p>
+                                            <ul>
+                                                <li><strong>左矩形法</strong>: 使用子区间左端点函数值构建矩形</li>
+                                                <li><strong>右矩形法</strong>: 使用子区间右端点函数值构建矩形</li>
+                                                <li><strong>中点矩形法</strong>: 使用子区间中点函数值构建矩形</li>
+                                            </ul>
+                                            <p>当函数单调时：</p>
+                                            <ul>
+                                                <li>对于增函数，左矩形和小于实际值，右矩形和大于实际值</li>
+                                                <li>对于减函数，左矩形和大于实际值，右矩形和小于实际值</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h4 class="card-title">梯形法则</h4>
+                                            <p>将每个子区间上的曲线用连接两端点的直线段代替，构成梯形。</p>
+                                            <p>梯形法公式：</p>
+                                            <p class="math-formula">\(T_n = \frac{h}{2}[f(a) + 2f(x_1) + 2f(x_2) + ... + 2f(x_{n-1}) + f(b)]\)</p>
+                                            <p>其中 h = (b-a)/n 是子区间长度。</p>
+                                            <p>梯形法的误差通常比矩形法小，特别是对于平滑函数。</p>
+                                            <p>对于凸函数，梯形法的近似值总是大于实际积分值；对于凹函数，梯形法的近似值总是小于实际积分值。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h4 class="card-title">辛普森法则</h4>
+                                            <p>辛普森（Simpson）法则使用抛物线逼近函数曲线。</p>
+                                            <p>辛普森法公式：</p>
+                                            <p class="math-formula">\(S_n = \frac{h}{3}[f(a) + 4f(x_1) + 2f(x_2) + 4f(x_3) + ... + 2f(x_{n-2}) + 4f(x_{n-1}) + f(b)]\)</p>
+                                            <p>其中 n 必须是偶数，h = (b-a)/n。</p>
+                                            <p>辛普森法则的精度通常优于矩形法和梯形法，对于具有连续导数的函数尤其有效。</p>
+                                            <p>当函数能够用三次或更低次数的多项式表示时，辛普森法则给出的是精确积分值。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="alert alert-info">
+                                    <h4><i class="bi bi-lightbulb"></i> 误差分析</h4>
+                                    <p>对于上述近似方法，当子区间数量 n 增加时，近似误差通常会减小：</p>
+                                    <ul>
+                                        <li>矩形法的误差与 1/n 成正比</li>
+                                        <li>梯形法的误差与 1/n² 成正比</li>
+                                        <li>辛普森法的误差与 1/n⁴ 成正比</li>
+                                    </ul>
+                                    <p>这说明辛普森法的收敛速度更快，需要较少的子区间就能获得较高的精度。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 积分应用标签页 -->
+            <div id="integral-applications" class="tab-pane">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel">
+                            <h3>积分的实际应用</h3>
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title"><i class="bi bi-graph-up"></i> 物理学应用</h4>
+                                            <ul>
+                                                <li><strong>位移计算</strong>：已知速度函数 v(t)，位移 s = ∫v(t)dt</li>
+                                                <li><strong>功的计算</strong>：变力沿路径做功 W = ∫F(x)dx</li>
+                                                <li><strong>质心计算</strong>：非均匀密度物体的质心位置</li>
+                                                <li><strong>流体压力</strong>：液体对竖直平面产生的压力计算</li>
+                                                <li><strong>电磁学</strong>：电场、磁场的计算</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title"><i class="bi bi-bank"></i> 经济学应用</h4>
+                                            <ul>
+                                                <li><strong>消费者与生产者剩余</strong>：市场均衡分析</li>
+                                                <li><strong>洛伦兹曲线与基尼系数</strong>：收入分配不平等程度衡量</li>
+                                                <li><strong>连续复利</strong>：∫P(t)r(t)dt 计算资金增长</li>
+                                                <li><strong>边际分析</strong>：边际成本、边际收益等</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <h4 class="card-title"><i class="bi bi-rulers"></i> 几何学应用</h4>
+                                            <ul>
+                                                <li><strong>面积计算</strong>：平面区域的面积</li>
+                                                <li><strong>曲线长度</strong>：参数曲线的长度计算</li>
+                                                <li><strong>旋转体体积</strong>：平面区域绕坐标轴旋转形成的立体体积</li>
+                                                <li><strong>旋转体表面积</strong>：曲线绕坐标轴旋转形成的表面积</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title"><i class="bi bi-pin-map"></i> 其他领域应用</h4>
+                                            <ul>
+                                                <li><strong>概率论</strong>：概率密度函数的积分计算概率</li>
+                                                <li><strong>信号处理</strong>：傅里叶变换、拉普拉斯变换</li>
+                                                <li><strong>人口统计学</strong>：人口增长模型</li>
+                                                <li><strong>生物学</strong>：种群动态模型</li>
+                                                <li><strong>工程学</strong>：结构分析、热传导等</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-5">
+        <div class="container">
+            <p class="text-center">© 2025 数学可视化教学平台 | 保留所有权利</p>
+        </div>
+    </footer>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- 优化脚本加载 -->
+    <script>
+        // 页面加载完成后隐藏加载指示器
+        window.addEventListener('load', function() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            if (loadingIndicator) {
+                loadingIndicator.style.opacity = '0';
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'none';
+                }, 500);
+            }
+            
+            // 标签页切换功能
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // 移除所有标签和内容的活动状态
+                    document.querySelectorAll('.tab-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.tab-pane').forEach(pane => {
+                        pane.classList.remove('active');
+                    });
+                    
+                    // 添加当前标签和内容的活动状态
+                    button.classList.add('active');
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // 微信按钮点击事件
+            const wechatBtn = document.getElementById('wechat-btn');
+            if (wechatBtn) {
+                wechatBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('哞哞微课设计的微信号：JZNYNandZZZYZ');
+                });
+            }
+        });
+    </script>
+    <script src="script.js" defer></script>
+</body>
+</html> 

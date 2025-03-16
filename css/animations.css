@@ -1,0 +1,287 @@
+/* 
+ * 数学可视化平台 - 动画效果
+ * 为界面添加轻量级现代交互动画
+ */
+
+/* 全局过渡效果 */
+* {
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+/* 页面载入动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-section, .experiment-list, .about-section, .contact-section {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.experiment-list {
+  animation-delay: 0.2s;
+}
+
+.about-section {
+  animation-delay: 0.4s;
+}
+
+.contact-section {
+  animation-delay: 0.6s;
+}
+
+/* 导航栏动画 */
+.nav-logo {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-logo i {
+  display: inline-block;
+  transition: transform 0.5s ease;
+}
+
+.nav-logo:hover i {
+  transform: rotate(360deg);
+}
+
+/* 实验卡片悬停效果 */
+.experiment-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.experiment-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+}
+
+.experiment-placeholder i {
+  transition: transform 0.5s ease, color 0.5s ease;
+}
+
+.experiment-card:hover .experiment-placeholder i {
+  transform: scale(1.2);
+  color: var(--primary-color);
+}
+
+/* 按钮动画 */
+.experiment-button, .btn, .contact-link {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.experiment-button::after, .btn::after, .contact-link::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease;
+  z-index: 0;
+}
+
+.experiment-button:hover::after, .btn:hover::after, .contact-link:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+.experiment-button span, .btn span, .contact-link span, 
+.experiment-button i, .btn i, .contact-link i {
+  position: relative;
+  z-index: 1;
+}
+
+/* 特性卡片动画 */
+.feature-item {
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  background-color: rgba(51, 102, 204, 0.03);
+}
+
+.feature-icon {
+  transition: transform 0.5s ease;
+}
+
+.feature-item:hover .feature-icon {
+  transform: scale(1.15);
+}
+
+/* 联系卡片动画 */
+.contact-image {
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.contact-card:hover .contact-image {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* 滚动动画效果 */
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 微信按钮特效 */
+#wechat-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+#wechat-btn::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 50%;
+  height: 50%;
+  background: linear-gradient(to bottom right, rgba(255,255,255,0.3), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+}
+
+#wechat-btn:hover::before {
+  top: 100%;
+  left: 100%;
+}
+
+/* 卡片内容悬停效果 */
+.description-card, .explanation-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.description-card:hover, .explanation-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+/* 画布容器悬停效果 */
+.canvas-container {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.canvas-container:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 控制面板悬停效果 */
+.controls-panel {
+  transition: box-shadow 0.4s ease;
+}
+
+.controls-panel:hover {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* 标签切换动画 */
+.nav-tabs .nav-link {
+  position: relative;
+}
+
+.nav-tabs .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: var(--primary-color);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-tabs .nav-link.active::after {
+  width: 100%;
+  left: 0;
+}
+
+/* 加载中动画 */
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+}
+
+.loading {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* 实用动画类 */
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+.rotate {
+  animation: rotate 2s infinite linear;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+} 

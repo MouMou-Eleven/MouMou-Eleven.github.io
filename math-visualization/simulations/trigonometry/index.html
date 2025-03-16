@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三角函数可视化 | 数学概念可视化教学平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 添加Bootstrap图标 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- 使用完整版p5.js -->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+    <!-- 使用数学公式库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .tab-content {
+            margin-top: 20px;
+        }
+        
+        .canvas-container {
+            border: 1px solid #dee2e6;
+            background-color: white;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+            min-height: 500px;
+            position: relative;
+        }
+        
+        .panel {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .control-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .slider-container {
+            margin-bottom: 15px;
+        }
+        
+        .value-display {
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        /* 显示修复 */
+        canvas {
+            display: block !important;
+            margin: 0 auto !important;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        /* 新的作者信息样式 */
+        .author-banner {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6, #0ea5e9);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .author-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            clip-path: polygon(35% 0, 100% 0%, 100% 100%, 0% 100%);
+            z-index: 1;
+        }
+        
+        .author-info {
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .author-info h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: white;
+            font-size: 1.6rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .author-info h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 3px;
+        }
+        
+        .author-info p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 5px;
+            max-width: 800px;
+            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .author-info p:last-child {
+            font-weight: 500;
+            margin-top: 8px;
+            font-size: 1rem;
+            color: #f0f9ff;
+        }
+        
+        .resource-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 5px 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .resource-btn {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #4f46e5;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+        }
+        
+        .resource-btn:hover {
+            background-color: white;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+            color: #3730a3;
+            text-decoration: none;
+        }
+        
+        .social-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            cursor: pointer;
+            text-decoration: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        .social-button:hover {
+            background-color: rgba(255, 255, 255, 0.35);
+            color: white;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+        }
+        
+        .social-button i {
+            font-size: 1.1rem;
+        }
+        
+        .wechat-btn {
+            background-color: rgba(130, 230, 80, 0.25);
+            border: 1px solid rgba(130, 230, 80, 0.4);
+        }
+        
+        .wechat-btn:hover {
+            background-color: rgba(130, 230, 80, 0.35);
+        }
+        
+        /* 响应式调整 */
+        @media (min-width: 768px) {
+            .author-banner {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .author-info {
+                flex: 2;
+                margin-bottom: 0;
+                padding-right: 20px;
+            }
+            
+            .resource-buttons {
+                flex: 1;
+                justify-content: flex-end;
+            }
+        }
+        
+        /* 三角函数特有样式 */
+        .circle-canvas {
+            border: 1px solid #ccc;
+            background-color: #fcfcfc;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .function-formula {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        
+        .parameter-group {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+        
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .color-indicator {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        
+        .sin-color {
+            background-color: #3f51b5;
+        }
+        
+        .cos-color {
+            background-color: #e91e63;
+        }
+        
+        .tan-color {
+            background-color: #4caf50;
+        }
+        
+        .angle-marker {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .function-info {
+            background-color: #e9f7fe;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .relation-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        
+        .relation-table th, 
+        .relation-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .relation-table th {
+            background-color: #f2f2f2;
+        }
+        
+        .relation-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .angle-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #333;
+        }
+        
+        .angle-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .special-angle-btn {
+            flex: 1;
+            min-width: 70px;
+            text-align: center;
+            padding: 5px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">三角函数可视化</h1>
+        
+        <a href="../../index.html" class="btn btn-primary home-btn">
+            返回首页
+        </a>
+        
+        <!-- 作者信息区块 -->
+        <div class="author-banner">
+            <div class="author-info">
+                <h3>哞哞微课设计</h3>
+                <p class="mb-0">哞哞是一位AI+的专业微课设计师</p>
+                <p class="mb-0">目前微课已获国奖、省奖；精品课已获部级</p>
+                <p class="mb-0">该平台是哞哞利用代码开发出来的数学概念可视化交互网站，是一种全新的微课教学方式，该平台仅作展示使用</p>
+                <p>诚接万彩微课、精品课，PPT设计等</p>
+            </div>
+            <div class="resource-buttons">
+                <a href="https://hv21wf9uao9.feishu.cn/wiki/R5iYwaKVuicVr0kZ19acC9OwnUb?from=from_copylink" target="_blank" class="resource-btn">
+                    <i class="bi bi-journal-text"></i> 哞哞微课专属资料
+                </a>
+                <a href="https://www.xiaohongshu.com/user/profile/5cff912400000000170007a2?xsec_token=YBjHEYzdqZTW1eQBpM4YLD8idxT-ndQYhqfLilb9OCYFQ%3D&xsec_source=app_share&xhsshare=CopyLink&appuid=671a0d14000000001d021f4e&apptime=1741942282&share_id=2399488b2ed241aeaa08b7a54ac7f1ff&share_channel=copy_link" target="_blank" class="social-button">
+                    <i class="bi bi-book"></i> 小红书主页
+                </a>
+                <a class="social-button wechat-btn">
+                    <i class="bi bi-wechat"></i> 微信：JZNYNandZZZYZ
+                </a>
+            </div>
+        </div>
+        
+        <!-- 标签页导航栏 -->
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <button class="nav-link tab-btn active" data-tab="unit-circle">单位圆与三角函数</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link tab-btn" data-tab="function-graphs">三角函数图像</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link tab-btn" data-tab="special-angles">特殊角的三角函数值</button>
+            </li>
+        </ul>
+        
+        <!-- 标签页内容 -->
+        <div class="tab-content">
+            <!-- 单位圆与三角函数标签页 -->
+            <div id="unit-circle" class="tab-pane active">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="canvas-container">
+                            <div id="unit-circle-canvas"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="panel">
+                            <h3 class="mb-3">单位圆控制面板</h3>
+                            
+                            <!-- 角度控制 -->
+                            <div>
+                                <div class="control-label">角度控制</div>
+                                <div class="angle-display">
+                                    <span id="angle-degrees">0°</span> = 
+                                    <span id="angle-radians">0 rad</span>
+                                </div>
+                                
+                                <!-- 特殊角按钮 -->
+                                <div class="angle-btns">
+                                    <button class="btn btn-sm btn-outline-secondary special-angle-btn" data-angle="0">0°</button>
+                                    <button class="btn btn-sm btn-outline-secondary special-angle-btn" data-angle="30">30°</button>
+                                    <button class="btn btn-sm btn-outline-secondary special-angle-btn" data-angle="45">45°</button>
+                                    <button class="btn btn-sm btn-outline-secondary special-angle-btn" data-angle="60">60°</button>
+                                    <button class="btn btn-sm btn-outline-secondary special-angle-btn" data-angle="90">90°</button>
+                                    <button class="btn btn-sm btn-outline-secondary special-angle-btn" data-angle="180">180°</button>
+                                    <button class="btn btn-sm btn-outline-secondary special-angle-btn" data-angle="270">270°</button>
+                                </div>
+                                
+                                <div class="slider-container">
+                                    <input type="range" id="angle-slider" class="form-range" min="0" max="360" step="1" value="0">
+                                </div>
+                            </div>
+                            
+                            <!-- 三角函数值 -->
+                            <div class="parameter-group">
+                                <div class="control-label">三角函数值</div>
+                                <p><span class="color-indicator sin-color"></span> sin(θ) = <span id="sin-value" class="value-display">0.0000</span></p>
+                                <p><span class="color-indicator cos-color"></span> cos(θ) = <span id="cos-value" class="value-display">1.0000</span></p>
+                                <p><span class="color-indicator tan-color"></span> tan(θ) = <span id="tan-value" class="value-display">0.0000</span></p>
+                            </div>
+                            
+                            <!-- 显示设置 -->
+                            <div class="parameter-group">
+                                <div class="control-label">显示设置</div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-sin-line" checked>
+                                    <label class="form-check-label" for="show-sin-line">显示正弦线</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-cos-line" checked>
+                                    <label class="form-check-label" for="show-cos-line">显示余弦线</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-tan-line" checked>
+                                    <label class="form-check-label" for="show-tan-line">显示正切线</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-angle-arc" checked>
+                                    <label class="form-check-label" for="show-angle-arc">显示角度弧</label>
+                                </div>
+                            </div>
+                            
+                            <!-- 信息说明 -->
+                            <div class="function-info">
+                                <p class="mb-1"><strong>单位圆中的三角函数定义：</strong></p>
+                                <p class="mb-1">- sin(θ)：点的y坐标值</p>
+                                <p class="mb-1">- cos(θ)：点的x坐标值</p>
+                                <p class="mb-0">- tan(θ)：sin(θ)/cos(θ)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 三角函数图像标签页 -->
+            <div id="function-graphs" class="tab-pane">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="canvas-container">
+                            <div id="graph-canvas"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="panel">
+                            <h3 class="mb-3">三角函数图像控制面板</h3>
+                            
+                            <!-- 显示控制 -->
+                            <div>
+                                <div class="control-label">显示函数</div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-sin-graph" checked>
+                                    <label class="form-check-label" for="show-sin-graph">
+                                        <span class="color-indicator sin-color"></span> y = sin(x)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-cos-graph" checked>
+                                    <label class="form-check-label" for="show-cos-graph">
+                                        <span class="color-indicator cos-color"></span> y = cos(x)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-tan-graph">
+                                    <label class="form-check-label" for="show-tan-graph">
+                                        <span class="color-indicator tan-color"></span> y = tan(x)
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- 参数控制 -->
+                            <div class="parameter-group">
+                                <div class="control-label">函数参数 y = a·sin(b·x + c) + d</div>
+                                <div class="slider-container">
+                                    <label class="form-label">振幅 (a): <span id="amplitude-display">1.0</span></label>
+                                    <input type="range" id="amplitude" class="form-range" min="0.1" max="2" step="0.1" value="1">
+                                </div>
+                                <div class="slider-container">
+                                    <label class="form-label">频率 (b): <span id="frequency-display">1.0</span></label>
+                                    <input type="range" id="frequency" class="form-range" min="0.1" max="3" step="0.1" value="1">
+                                </div>
+                                <div class="slider-container">
+                                    <label class="form-label">相位 (c): <span id="phase-display">0.0</span></label>
+                                    <input type="range" id="phase" class="form-range" min="-3.14" max="3.14" step="0.1" value="0">
+                                </div>
+                                <div class="slider-container">
+                                    <label class="form-label">垂直平移 (d): <span id="offset-display">0.0</span></label>
+                                    <input type="range" id="offset" class="form-range" min="-2" max="2" step="0.1" value="0">
+                                </div>
+                            </div>
+                            
+                            <!-- 当前函数表达式 -->
+                            <div class="parameter-group">
+                                <div class="control-label">当前函数</div>
+                                <div id="sin-function-display" class="function-formula">y = sin(x)</div>
+                                <div id="cos-function-display" class="function-formula">y = cos(x)</div>
+                                <div id="tan-function-display" class="function-formula">y = tan(x)</div>
+                            </div>
+                            
+                            <!-- 信息说明 -->
+                            <div class="function-info">
+                                <p class="mb-1"><strong>三角函数图像特点：</strong></p>
+                                <p class="mb-1">- sin(x)、cos(x) 的周期为 2π</p>
+                                <p class="mb-1">- tan(x) 的周期为 π</p>
+                                <p class="mb-0">- 调整参数可以观察三角函数变换后的图像</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 特殊角的三角函数值标签页 -->
+            <div id="special-angles" class="tab-pane">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="canvas-container">
+                            <div id="special-angles-canvas"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="panel">
+                            <h3 class="mb-3">特殊角的三角函数值</h3>
+                            
+                            <!-- 特殊角选择 -->
+                            <div>
+                                <div class="control-label mb-2">选择特殊角</div>
+                                <div class="btn-group w-100 mb-3">
+                                    <button type="button" class="btn btn-outline-primary special-angle-select" data-angle="0">0°</button>
+                                    <button type="button" class="btn btn-outline-primary special-angle-select" data-angle="30">30°</button>
+                                    <button type="button" class="btn btn-outline-primary special-angle-select" data-angle="45">45°</button>
+                                    <button type="button" class="btn btn-outline-primary special-angle-select" data-angle="60">60°</button>
+                                    <button type="button" class="btn btn-outline-primary special-angle-select" data-angle="90">90°</button>
+                                </div>
+                            </div>
+                            
+                            <!-- 特殊角的三角函数值 -->
+                            <div class="parameter-group">
+                                <div class="control-label">三角函数值</div>
+                                <table class="relation-table">
+                                    <thead>
+                                        <tr>
+                                            <th>角度</th>
+                                            <th>弧度</th>
+                                            <th>sin</th>
+                                            <th>cos</th>
+                                            <th>tan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0°</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>30°</td>
+                                            <td>π/6</td>
+                                            <td>1/2</td>
+                                            <td>√3/2</td>
+                                            <td>1/√3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>45°</td>
+                                            <td>π/4</td>
+                                            <td>√2/2</td>
+                                            <td>√2/2</td>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>60°</td>
+                                            <td>π/3</td>
+                                            <td>√3/2</td>
+                                            <td>1/2</td>
+                                            <td>√3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>90°</td>
+                                            <td>π/2</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>∞</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- 特殊角的记忆方法 -->
+                            <div class="function-info">
+                                <p class="mb-1"><strong>特殊角记忆方法：</strong></p>
+                                <p class="mb-1">- sin值：0°, 30°, 45°, 60°, 90° 对应 0, 1/2, √2/2, √3/2, 1</p>
+                                <p class="mb-1">- cos值与sin值对称(0°的cos等于90°的sin)</p>
+                                <p class="mb-0">- 利用右三角形和单位圆可以直观理解这些值</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript引用 -->
+    <script src="script.js"></script>
+
+    <script>
+        // 初始化MathJax
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('三角函数页面加载完成');
+            
+            // 设置标签页切换
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // 移除所有标签和内容的活动状态
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                    
+                    // 添加当前标签和内容的活动状态
+                    button.classList.add('active');
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

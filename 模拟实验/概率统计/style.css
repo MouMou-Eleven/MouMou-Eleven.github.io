@@ -1,0 +1,692 @@
+/* 页面整体样式 */
+:root {
+    /* 主色系统 */
+    --primary-color: #560bad;
+    --primary-light: #7209b7;
+    --primary-dark: #3a0ca3;
+    --primary-ultra-light: #f8f0fc;
+    
+    /* 辅色系统 */
+    --secondary-color: #4361ee;
+    --secondary-light: #4895ef;
+    --secondary-dark: #3f37c9;
+    
+    /* 灰度系统 */
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    
+    /* 功能色 */
+    --success: #4CAF50;
+    --warning: #ff9900;
+    --error: #dc3545;
+    --info: #0dcaf0;
+    
+    /* 间距系统 */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-xxl: 48px;
+    
+    /* 圆角 */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    
+    /* 阴影 */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.12);
+    
+    /* 动画 */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* 字体 */
+    --font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+    --font-weight-black: 900;
+}
+
+body {
+    font-family: 'Microsoft YaHei', sans-serif;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 15% 15%, rgba(var(--primary-color), 0.025) 0%, transparent 15%),
+        radial-gradient(circle at 85% 85%, rgba(var(--secondary-color), 0.025) 0%, transparent 15%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+/* 描述文本 */
+.description {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    color: #495057;
+}
+
+/* 标签样式 */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--gray-300);
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: var(--gray-100);
+    border: 1px solid var(--gray-300);
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover {
+    background-color: var(--gray-200);
+}
+
+.tab-btn.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+    color: var(--primary-color);
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.canvas-container {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 500px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.panel {
+    width: 100%;
+    max-width: 100%;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.control-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.slider-container {
+    margin-bottom: 15px;
+}
+
+.value-display {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.home-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* 显示修复 */
+canvas {
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* 作者信息样式 */
+.author-banner {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6, #0ea5e9);
+    color: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.author-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(30deg);
+    pointer-events: none;
+}
+
+.author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.author-info h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.author-info p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.resource-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.resource-btn, .resource-button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.resource-btn:hover, .resource-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+    color: white;
+    text-decoration: none;
+}
+
+.wechat-btn {
+    background-color: rgba(130, 230, 80, 0.25);
+}
+
+.wechat-btn:hover {
+    background-color: rgba(130, 230, 80, 0.35);
+}
+
+/* 数值显示样式 */
+.values-display {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.value-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.value-group:last-child {
+    margin-bottom: 0;
+}
+
+.value-label {
+    font-weight: 500;
+}
+
+.value {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* 解释部分样式 */
+.explanation {
+    margin-top: 40px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.explanation h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.explanation-content {
+    line-height: 1.6;
+}
+
+.explanation h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.math-formula {
+    font-style: italic;
+    padding: 0 3px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .canvas-container, .panel {
+        width: 100%;
+    }
+    
+    .canvas-container {
+        height: 400px;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        min-width: 80px;
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    .author-banner {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    
+    .controls-panel h3 {
+        font-size: 18px;
+    }
+    
+    .canvas-container {
+        height: 300px;
+    }
+}
+
+/* 删除旧的生成样本和投掷骰子按钮样式，使用组件库中的animated-button样式 */
+#generate-samples-btn, #roll-dice-btn {
+    display: block !important;
+    width: 100% !important;
+    background-color: #560bad !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px 15px !important;
+    margin: 10px 0 !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+}
+
+#generate-samples-btn:hover, #roll-dice-btn:hover {
+    background-color: #7209b7 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* 布局修复 */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    align-items: stretch;
+    box-sizing: border-box;
+}
+
+.col-lg-8, .col-lg-4 {
+    padding-right: 15px;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+/* 概率分布解析卡片修复 */
+.blob-card {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 30px auto;
+    box-sizing: border-box;
+    border-radius: 14px;
+    padding: 40px 30px;
+    overflow: hidden;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.1), -5px -5px 30px rgba(255, 255, 255, 0.8);
+}
+
+.blob-card .bg {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    z-index: -1;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(24px);
+    border-radius: 10px;
+    overflow: hidden;
+    outline: 2px solid white;
+}
+
+.blob-card .blob {
+    position: absolute;
+    z-index: -2;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: rgba(58, 12, 163, 0.6); /* 深紫色 */
+    opacity: 0.7;
+    filter: blur(20px);
+    animation: blob-bounce 10s infinite ease;
+}
+
+.blob-card .card-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* 确保概率分布解析卡片与内容对齐 */
+.container .blob-card {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/* 布局修复 - 确保所有面板对齐 */
+.panel, .canvas-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+/* 确保行布局正确 */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    align-items: stretch;
+    box-sizing: border-box;
+}
+
+/* 修复列布局 */
+.col-lg-8, .col-lg-4 {
+    padding-right: 15px;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+/* 移动端响应式调整 */
+@media (max-width: 768px) {
+    .blob-card {
+        padding: 15px;
+    }
+    
+    .col-lg-8, .col-lg-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* 添加动态边框效果到所有带框元素 */
+.panel, .canvas-container, .values-display, .explanation {
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+}
+
+/* 添加背景层 */
+.panel::before, .canvas-container::before, .values-display::before, .explanation::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    z-index: -1;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(24px);
+    border-radius: 5px;
+    overflow: hidden;
+    outline: 2px solid white;
+}
+
+/* 添加动画气泡层 */
+.panel::after, .canvas-container::after, .values-display::after, .explanation::after {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    top: 50%;
+    left: 50%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    opacity: 0.7;
+    filter: blur(12px);
+    animation: blob-bounce 8s infinite ease;
+}
+
+/* 为不同元素设置不同颜色的气泡 */
+.panel::after {
+    background-color: rgba(114, 9, 183, 0.6); /* 主题紫色 */
+}
+
+.canvas-container::after {
+    background-color: rgba(67, 97, 238, 0.6); /* 主题蓝色 */
+}
+
+.values-display::after {
+    background-color: rgba(76, 175, 80, 0.5); /* 绿色 */
+}
+
+.explanation::after {
+    background-color: rgba(255, 153, 0, 0.5); /* 橙色 */
+}
+
+/* 气泡动画 */
+@keyframes blob-bounce {
+    0% {
+        transform: translate(-100%, -100%) translate3d(0, 0, 0);
+    }
+    25% {
+        transform: translate(-100%, -100%) translate3d(100%, 0, 0);
+    }
+    50% {
+        transform: translate(-100%, -100%) translate3d(100%, 100%, 0);
+    }
+    75% {
+        transform: translate(-100%, -100%) translate3d(0, 100%, 0);
+    }
+    100% {
+        transform: translate(-100%, -100%) translate3d(0, 0, 0);
+    }
+}
+
+/* 调整text-card样式以匹配 */
+.text-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.1), -5px -5px 30px rgba(255, 255, 255, 0.8);
+}
+
+.text-card::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    left: 50%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: rgba(13, 202, 240, 0.6); /* 信息蓝色 */
+    opacity: 0.5;
+    filter: blur(12px);
+    animation: blob-bounce 12s infinite ease;
+}
+
+.text-card .card-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* 去除原有边框，让新效果更清晰 */
+.panel, .canvas-container, .values-display, .explanation {
+    border: none !important;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.1), -5px -5px 30px rgba(255, 255, 255, 0.8);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+
+/* 调整内边距 */
+.panel {
+    padding: 25px;
+}
+
+.values-display {
+    margin-bottom: 20px;
+    background: transparent;
+}
+
+.values-display::before {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* 添加鼠标悬停效果 */
+.panel:hover, .canvas-container:hover, .blob-card:hover, .text-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 7px 7px 35px rgba(0, 0, 0, 0.13), -7px -7px 35px rgba(255, 255, 255, 0.9);
+}
+
+/* 增加文本卡片与上下内容的间距 */
+.text-card {
+    margin: 40px 0;
+}
+
+/* 确保所有blob动画不同步 */
+.panel:nth-child(odd)::after {
+    animation-delay: -2s;
+}
+
+.canvas-container::after {
+    animation-delay: -3s;
+}
+
+.values-display::after {
+    animation-delay: -1s;
+}
+
+.text-card::after {
+    animation-delay: -4s;
+}
+
+.explanation::after {
+    animation-delay: -2.5s;
+}
+
+.blob-card .blob {
+    animation-delay: -1.5s;
+} 
