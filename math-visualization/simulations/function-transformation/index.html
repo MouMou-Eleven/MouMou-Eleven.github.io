@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数变换与图像 - 高中数学可视化教学平台</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@11.0.1/lib/browser/math.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="logo">数学可视化教学</div>
+            <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a href="../../index.html#simulations">模拟实验</a></li>
+                <li><a href="../../index.html#about">关于项目</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="simulation-container">
+        <h1>函数变换与图像</h1>
+        <p class="description">通过交互式控件，探索函数平移、拉伸、对称等变换对图像的影响。</p>
+        
+        <div class="simulation-wrapper">
+            <div id="simulation-canvas"></div>
+            
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="function-select">选择函数:</label>
+                    <select id="function-select">
+                        <option value="linear">线性函数 f(x) = x</option>
+                        <option value="quadratic">二次函数 f(x) = x²</option>
+                        <option value="cubic">三次函数 f(x) = x³</option>
+                        <option value="sine">正弦函数 f(x) = sin(x)</option>
+                        <option value="cosine">余弦函数 f(x) = cos(x)</option>
+                        <option value="exponential">指数函数 f(x) = e^x</option>
+                        <option value="logarithm">对数函数 f(x) = ln(x)</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="a-value">a值 (垂直拉伸系数):</label>
+                    <input type="range" id="a-value" min="0.1" max="3" step="0.1" value="1">
+                    <span id="a-display">1</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="h-value">h值 (水平平移):</label>
+                    <input type="range" id="h-value" min="-5" max="5" step="0.5" value="0">
+                    <span id="h-display">0</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="k-value">k值 (垂直平移):</label>
+                    <input type="range" id="k-value" min="-5" max="5" step="0.5" value="0">
+                    <span id="k-display">0</span>
+                </div>
+
+                <div class="control-group">
+                    <label for="b-value">b值 (水平拉伸系数):</label>
+                    <input type="range" id="b-value" min="0.1" max="3" step="0.1" value="1">
+                    <span id="b-display">1</span>
+                </div>
+                
+                <div class="control-group check-group">
+                    <input type="checkbox" id="show-grid">
+                    <label for="show-grid">显示网格</label>
+                </div>
+                
+                <div class="control-group check-group">
+                    <input type="checkbox" id="show-original" checked>
+                    <label for="show-original">显示原始函数</label>
+                </div>
+                
+                <div class="formula-display">
+                    <p>当前函数表达式: <span id="current-formula"></span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h2>函数变换原理</h2>
+            <p>对于原始函数 f(x)，我们可以通过以下变换得到新函数 g(x):</p>
+            
+            <div class="formula-explanation">
+                <div class="formula-item">
+                    <h3>垂直拉伸/压缩</h3>
+                    <p>g(x) = a·f(x) 其中 a > 0</p>
+                    <p>a > 1 时，图像在 y 方向拉伸</p>
+                    <p>0 < a < 1 时，图像在 y 方向压缩</p>
+                </div>
+                
+                <div class="formula-item">
+                    <h3>水平平移</h3>
+                    <p>g(x) = f(x - h)</p>
+                    <p>h > 0 时，图像向右平移 h 个单位</p>
+                    <p>h < 0 时，图像向左平移 |h| 个单位</p>
+                </div>
+                
+                <div class="formula-item">
+                    <h3>垂直平移</h3>
+                    <p>g(x) = f(x) + k</p>
+                    <p>k > 0 时，图像向上平移 k 个单位</p>
+                    <p>k < 0 时，图像向下平移 |k| 个单位</p>
+                </div>
+
+                <div class="formula-item">
+                    <h3>水平拉伸/压缩</h3>
+                    <p>g(x) = f(b·x) 其中 b > 0</p>
+                    <p>b > 1 时，图像在 x 方向压缩</p>
+                    <p>0 < b < 1 时，图像在 x 方向拉伸</p>
+                </div>
+            </div>
+            
+            <p class="comprehensive">综合变换: g(x) = a·f(b·(x - h)) + k</p>
+            
+            <div class="examples">
+                <h3>实际应用示例</h3>
+                <p>函数变换在数学建模、物理学、经济学等领域有广泛应用。例如：</p>
+                <ul>
+                    <li>物理中的简谐运动可以用正弦函数的变换来描述</li>
+                    <li>经济学中的成本函数往往是二次函数的变换</li>
+                    <li>信号处理中，波形的变换可以通过函数变换来实现</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>高中数学可视化教学平台</h3>
+                <p>让抽象的数学概念变得直观易懂</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>资源链接</h4>
+                <ul>
+                    <li><a href="#">教学指南</a></li>
+                    <li><a href="#">常见问题</a></li>
+                    <li><a href="#">更新日志</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>相关资源</h4>
+                <ul>
+                    <li><a href="#">数学教学资料</a></li>
+                    <li><a href="#">实验指导</a></li>
+                    <li><a href="#">学习社区</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2025 数学可视化教学平台. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

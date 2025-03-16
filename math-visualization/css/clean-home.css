@@ -1,0 +1,322 @@
+/* 
+ * 数学可视化平台 - 简洁主页样式
+ * 为首页提供简洁的设计
+ */
+
+/* 导入基础变量 */
+@import 'clean-theme.css';
+
+/* 主页特有样式 */
+.hero-section {
+  padding: 60px 0;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 15px;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: var(--light-text);
+  margin-bottom: 30px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.experiment-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.experiment-card {
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.experiment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.experiment-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.experiment-placeholder {
+  width: 100%;
+  height: 180px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--light-text);
+  font-size: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.experiment-body {
+  padding: 20px;
+}
+
+.experiment-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+.experiment-description {
+  color: var(--light-text);
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.experiment-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.experiment-button:hover {
+  background-color: #2952a3;
+  text-decoration: none;
+  color: white;
+}
+
+.about-section {
+  background-color: var(--background-color);
+  padding: 40px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  border: 1px solid var(--border-color);
+}
+
+.about-section h2 {
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.about-section p {
+  color: var(--text-color);
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.feature-item {
+  background-color: var(--background-color);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.feature-icon {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.feature-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+.feature-description {
+  color: var(--light-text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.contact-section {
+  margin-bottom: 40px;
+  background-color: var(--background-color);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.contact-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.contact-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid var(--primary-color);
+}
+
+.contact-info {
+  flex: 1;
+  color: var(--text-color);
+}
+
+.contact-info h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.contact-info p {
+  color: var(--text-color);
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.contact-link:hover {
+  background-color: #2952a3;
+  text-decoration: none;
+  color: white;
+}
+
+/* 顶部导航 */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  margin-bottom: 30px;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.nav-logo:hover {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.nav-logo i {
+  color: var(--primary-color);
+  margin-right: 8px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 0;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--primary-color);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+  transition: width 0.2s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .contact-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .contact-image {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .contact-links {
+    justify-content: center;
+  }
+  
+  .top-nav {
+    flex-direction: column;
+    gap: 15px;
+  }
+} 
